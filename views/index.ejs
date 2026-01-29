@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Chat App</title>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+        integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+"
+        crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="dminfo">
+                <div class="dmprofile"></div>
+                <div class="dmname">Chat Uygulaması</div>
+            </div>
+            <div class="dmcontent">
+
+            </div>
+            <br><br>
+            <div class="userdiv">
+                <input id="message" name="message" class="textinput" type="text"
+                    placeholder="Göndermek istediğiniz mesajı buraya yazın.">
+                <button id="gonderbtn" class="submitinput">GÖNDER</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+
+
+
+        const socket = io();
+
+        const messageinput = document.getElementById("message");
+        const gonderbtn = document.getElementById("gonderbtn");
+        const dmcontent = document.querySelector(".dmcontent");
+
+
+        gonderbtn.addEventListener("click", () => {
+            let message = document.getElementById("message");
+            socket.emit("message", message.value);
+
+            messageinput.focus();
+        });
+
+
+        document.addEventListener("keydown", (event) => {
+            if (event.keyCode == 13) {
+                let message = document.getElementById("message");
+                socket.emit("message", message.value);
+            }
+        });
+
+        socket.on("yourmessage", (msg) => {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message-row me";
+            const messageRow = document.createElement("div");
+            messageRow.className = "usermessage bggreenright";
+            messageRow.textContent = msg;
+            dmcontent.appendChild(messageDiv);
+            messageDiv.appendChild(messageRow);
+            messageinput.value = "";
+
+            dmcontent.scrollTop = dmcontent.scrollHeight;
+        });
+
+        socket.on("message", (msg) => {
+            const messageDiv = document.createElement("div");
+            messageDiv.className = "message-row other";
+            const messageRow = document.createElement("div");
+            messageRow.className = "usermessage bgdarkleft";
+            messageRow.textContent = msg;
+            dmcontent.appendChild(messageDiv);
+            messageDiv.appendChild(messageRow);
+
+            dmcontent.scrollTop = dmcontent.scrollHeight;
+        });
+
+    </script>
+</body>
+
+</html>
