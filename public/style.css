@@ -3,11 +3,9 @@
     padding: 0px;
     box-sizing: border-box;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 
-body {
-    overflow: hidden;
-}
 
 .container {
     width: 100dvw;
@@ -34,6 +32,7 @@ body {
     align-items: center;
     flex-direction: row;
     background-color: #262626;
+    position: fixed;
 }
 
 .dmprofile {
@@ -61,6 +60,8 @@ body {
     flex-grow: 1;
     background-color: transparent;
     overflow-y: auto;
+    height: 100%;
+    margin-top: 5rem;
 }
 
 .userdiv {
@@ -116,7 +117,7 @@ body {
     min-width: 100px;
     min-height: 40px;
     margin-top: 1rem;
-    max-width: 200px;
+    max-width: 500px;
     max-height: 500px;
     width: fit-content;
     padding: 10px 10px;
@@ -127,10 +128,12 @@ body {
 @keyframes textanim {
     from {
         transform: rotate(180deg);
+        opacity: 0;
     }
 
     to {
         transform: rotate(0deg);
+        opacity: 1;
     }
 }
 
@@ -146,3 +149,19 @@ body {
     animation: .5s textanim forwards;
 }
 
+
+::-webkit-scrollbar
+{
+    width: 10px;
+}
+
+::-webkit-scrollbar-track
+{
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb
+{
+    background-color: gray;
+    border-radius: 100px;
+}
