@@ -18,11 +18,16 @@ app.get("/",(req,res)=>{
 
 
 io.on("connection",(socket)=>{
-    console.log("biri baglandi");
 
-    socket.on("message",(message)=>{
-        socket.broadcast.emit("message",message);
-        socket.emit("yourmessage",message);
+    io.emit("friend","BİRİ SOHBETE KATILDI.");
+
+    socket.on("message",(data)=>{
+        socket.broadcast.emit("message",data);
+        socket.emit("yourmessage",data);
+    });
+
+    socket.on("disconnect",()=>{
+        io.emit("friend","BİRİ SOHBETTEN AYRILDI.");
     });
 });
 

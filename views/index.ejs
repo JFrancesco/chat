@@ -43,39 +43,66 @@
         const dmcontent = document.querySelector(".dmcontent");
 
 
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get("username") || "Ziyaretçi";
+
+
+
 
 
         document.addEventListener("keydown", (event) => {
-            if (event.keyCode == 13) {
+            if (event.key == "Enter" && !event.shiftKey) {
+                event.preventDefault();
                 let message = document.getElementById("message");
-                socket.emit("message", message.value);
+                socket.emit("message", { user: username, text: message.value });
             }
         });
 
-        socket.on("yourmessage", (msg) => {
+        socket.on("yourmessage", (data) => {
+            let date = new Date();
             const messageDiv = document.createElement("div");
             messageDiv.className = "message-row me";
             const messageRow = document.createElement("div");
             messageRow.className = "usermessage bggreenright";
-            messageRow.innerHTML = msg;
+            messageRow.innerHTML = data.text + "<time>" + date.getHours() + ":" + date.getMinutes() + "</time>";
             dmcontent.appendChild(messageDiv);
             messageDiv.appendChild(messageRow);
             messageinput.value = "";
 
             dmcontent.scrollTop = dmcontent.scrollHeight;
+
+            new Audio("audios/sending.mp3").play();
         });
 
-        socket.on("message", (msg) => {
+        socket.on("message", (data) => {
+            let date = new Date();
             const messageDiv = document.createElement("div");
             messageDiv.className = "message-row other";
             const messageRow = document.createElement("div");
             messageRow.className = "usermessage bgdarkleft";
-            messageRow.innerHTML = msg;
+            messageRow.innerHTML = `
+            <span>${data.user}</span> <p class=msgandtime>${data.text}  <time>${date.getHours()}:${date.getMinutes()}</time></p>
+            `;
+
+
             dmcontent.appendChild(messageDiv);
             messageDiv.appendChild(messageRow);
+            dmcontent.scrollTop = dmcontent.scrollHeight;
+            new Audio("audios/coming.mp3").play();
+        });
 
+        socket.on("friend", (data) => {
+            const systemMessageDiv = document.createElement("div");
+            systemMessageDiv.className = "systemMessage";
+            const systemMessageRow = document.createElement("div");
+            systemMessageRow.className = "systemMessageRow";
+            systemMessageRow.textContent = data;
+
+            dmcontent.appendChild(systemMessageDiv);
+            systemMessageDiv.appendChild(systemMessageRow);
             dmcontent.scrollTop = dmcontent.scrollHeight;
         });
+
 
     </script>
 </body>
