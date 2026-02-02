@@ -27,7 +27,6 @@
             <div class="userdiv">
                 <input id="message" name="message" class="textinput" type="text"
                     placeholder="Göndermek istediğiniz mesajı buraya yazın.">
-                <button id="gonderbtn" class="submitinput">GÖNDER</button>
             </div>
         </div>
     </div>
@@ -45,12 +44,6 @@
         const dmcontent = document.querySelector(".dmcontent");
 
 
-        gonderbtn.addEventListener("click", () => {
-            let message = document.getElementById("message");
-            socket.emit("message", message.value);
-
-            messageinput.focus();
-        });
 
 
         document.addEventListener("keydown", (event) => {
@@ -65,7 +58,7 @@
             messageDiv.className = "message-row me";
             const messageRow = document.createElement("div");
             messageRow.className = "usermessage bggreenright";
-            messageRow.textContent = msg;
+            messageRow.innerHTML = msg;
             dmcontent.appendChild(messageDiv);
             messageDiv.appendChild(messageRow);
             messageinput.value = "";
@@ -78,7 +71,7 @@
             messageDiv.className = "message-row other";
             const messageRow = document.createElement("div");
             messageRow.className = "usermessage bgdarkleft";
-            messageRow.textContent = msg;
+            messageRow.innerHTML = msg;
             dmcontent.appendChild(messageDiv);
             messageDiv.appendChild(messageRow);
 
